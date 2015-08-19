@@ -2,7 +2,7 @@ namenode:
   image: dcd/alpine-hadoop
   hostname: namenode
   volumes:
-    - /Users/juyttenh/data/docker/hadoop/namenode:/shared
+    - $DATADIR/namenode:/shared
   ports:
     - "8020:8020"
     - "50070:50070"
