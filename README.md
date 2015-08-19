@@ -19,7 +19,7 @@ The directory $DIVOLTE-COLLECTOR-CONF-DIR is made available as /etc/divolte-coll
 # Running docker-compose
 
 Execute docker-compose to start the containers
->docker-compose up -d
+>docker-compose -f $DC-RECIPY.yml up -d
 
 To shutdown, execute
 >docker-compose stop
