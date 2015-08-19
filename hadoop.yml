@@ -1,0 +1,39 @@
+namenode:
+  image: dcd/alpine-hadoop
+  hostname: namenode
+  volumes:
+    - /Users/juyttenh/data/docker/hadoop/namenode:/shared
+  ports:
+    - "8020:8020"
+    - "50070:50070"
+  command: hdfs namenode
+datanode1:
+  image: dcd/alpine-hadoop
+  hostname: datanode1
+  volumes:
+      - /Users/juyttenh/data/docker/hadoop/datanode1:/shared
+  links:
+      - namenode
+  ports:
+      - "5001:50075"
+  command: hdfs datanode
+datanode2:
+  image: dcd/alpine-hadoop
+  hostname: datanode2
+  volumes:
+      - /Users/juyttenh/data/docker/hadoop/datanode2:/shared
+  links:
+      - namenode
+  ports:
+      - "5002:50075"
+  command: hdfs datanode
+datanode3:
+  image: dcd/alpine-hadoop
+  hostname: datanode3
+  volumes:
+      - /Users/juyttenh/data/docker/hadoop/datanode3:/shared
+  links:
+      - namenode
+  ports:
+      - "5003:50075"
+  command: hdfs datanode

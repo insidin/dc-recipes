@@ -1,0 +1,52 @@
+zookeeper:
+  image: confluent/zookeeper
+  ports: 
+    - "2181:2181"
+  hostname: zookeeper
+kafka:
+  image: dcd/kafka
+  ports:
+    - "9092:9092"
+#    - "9092"
+  hostname: kafka
+  links: 
+    - zookeeper:zookeeper
+#    - statsd:statsd
+  environment:
+    KAFKA_LOG_CLEANUP_POLICY : 'compact'
+    KAFKA_ADVERTISED_HOST_NAME: '192.168.99.100'
+    KAFKA_BROKER_ID : 0
+    KAFKA_DELETE_TOPIC_ENABLE : 'true'
+#    KAFKA_EXTERNAL_KAFKA_STATSD_REPORTER_ENABLED : 'true'
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+schemaregistry:
+  image: confluent/schema-registry
+  ports:
+    - "8081:8081"
+  hostname: schemaregistry
+  links:
+    - zookeeper:zookeeper
+    - kafka:kafka
+  environment:
+    SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL : none
+#statsd:
+#  image: kamon/grafana_graphite
+#  ports:
+#    - "8888:80"
+#    - "8125:8125/udp"
+#    - "8126:8126"
+#  hostname: statsd
+divolte:
+  image: dcd/divolte-collector
+  ports:
+    - "8290:8290"
+  hostname: divoltecollector
+  links:
+    - kafka:kafka
+    - schemaregistry:schemaregistry
+  volumes:
+    - /Users/juyttenh/data/docker/divolte-collector:/etc/divolte-collector
+
+
+
