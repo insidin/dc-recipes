@@ -11,7 +11,7 @@ datanode1:
   image: dcd/alpine-hadoop
   hostname: datanode1
   volumes:
-      - /Users/juyttenh/data/docker/hadoop/datanode1:/shared
+      - $DATADIR/datanode1:/shared
   links:
       - namenode
   ports:
@@ -21,7 +21,7 @@ datanode2:
   image: dcd/alpine-hadoop
   hostname: datanode2
   volumes:
-      - /Users/juyttenh/data/docker/hadoop/datanode2:/shared
+      - $DATADIR/datanode2:/shared
   links:
       - namenode
   ports:
@@ -31,7 +31,7 @@ datanode3:
   image: dcd/alpine-hadoop
   hostname: datanode3
   volumes:
-      - /Users/juyttenh/data/docker/hadoop/datanode3:/shared
+      - $DATADIR/datanode3:/shared
   links:
       - namenode
   ports:
