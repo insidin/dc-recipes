@@ -7,14 +7,13 @@ kafka:
   image: dcd/kafka
   ports:
     - "9092:9092"
-#    - "9092"
   hostname: kafka
   links: 
     - zookeeper:zookeeper
 #    - statsd:statsd
   environment:
     KAFKA_LOG_CLEANUP_POLICY : 'compact'
-    KAFKA_ADVERTISED_HOST_NAME: '192.168.99.100'
+    KAFKA_ADVERTISED_HOST_NAME: '$HOST_IP'
     KAFKA_BROKER_ID : 0
     KAFKA_DELETE_TOPIC_ENABLE : 'true'
 #    KAFKA_EXTERNAL_KAFKA_STATSD_REPORTER_ENABLED : 'true'
@@ -46,7 +45,7 @@ divolte:
     - kafka:kafka
     - schemaregistry:schemaregistry
   volumes:
-    - /Users/juyttenh/data/docker/divolte-collector:/etc/divolte-collector
+    - $DIVOLTE-COLLECTOR-CONF-DIR:/etc/divolte-collector
 
 
 
