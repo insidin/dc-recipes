@@ -10,9 +10,11 @@ Starts:
 
 Docker images need to be pulled (for the conluent images) or build (for the dcd images, see https://github.com/insidin/docker-recipes)
 
-Confguration:
+Confguration: modify divolte-confluent.yml and 
+- replace $HOST_IP with the docker host IP address
+- replace $DIVOLTE-COLLECTOR-CONF-DIR with a folder where the divolte-collector.conf file is placed
 
-- modify divolte-confluent.yml and replace "HOST_IP" with the docker host IP address.
+The directory $DIVOLTE-COLLECTOR-CONF-DIR is made available as /etc/divolte-collector on the container, so use this path to reference files located there (e.g. your schema & mapping files).
 
 # Running docker-compose
 
