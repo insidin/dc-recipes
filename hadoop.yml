@@ -3,37 +3,51 @@ namenode:
   hostname: namenode
   volumes:
     - $DATADIR/namenode:/shared
+    - $DATADIR/conf:/shared/conf
   ports:
     - "8020:8020"
     - "50070:50070"
   command: hdfs namenode
+resourcemgr:
+  image: dcd/alpine-hadoop
+  hostname: resourcemgr
+  volumes:
+    - $DATADIR/resourcemgr:/shared
+    - $DATADIR/conf:/shared/conf
+  command: bash -c "yarn resourcemanager && mapred historyserver"
 datanode1:
   image: dcd/alpine-hadoop
   hostname: datanode1
   volumes:
       - $DATADIR/datanode1:/shared
+      - $DATADIR/conf:/shared/conf
   links:
       - namenode
+      - resourcemgr
   ports:
       - "5001:50075"
-  command: hdfs datanode
+  command: bash -c "hadoop-daemon.sh --config /shared/conf --script hdfs start datanode && yarn nodemanager"
 datanode2:
   image: dcd/alpine-hadoop
   hostname: datanode2
   volumes:
       - $DATADIR/datanode2:/shared
+      - $DATADIR/conf:/shared/conf
   links:
       - namenode
+      - resourcemgr
   ports:
       - "5002:50075"
-  command: hdfs datanode
+  command: bash -c "hadoop-daemon.sh --config /shared/conf --script hdfs start datanode && yarn nodemanager"
 datanode3:
   image: dcd/alpine-hadoop
   hostname: datanode3
   volumes:
       - $DATADIR/datanode3:/shared
+      - $DATADIR/conf:/shared/conf
   links:
       - namenode
+      - resourcemgr
   ports:
       - "5003:50075"
-  command: hdfs datanode
+  command: bash -c "hadoop-daemon.sh --config /shared/conf --script hdfs start datanode && yarn nodemanager"
