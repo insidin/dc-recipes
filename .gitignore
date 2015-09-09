@@ -13,3 +13,4 @@ target
 *.gem
 Gemfile.lock
 .bundle
+*.mine
