@@ -1,0 +1,74 @@
+namenode:
+  image: insidin/alpine-hadoop
+  hostname: namenode.docker
+  name: namenode
+  container_name : namenode  
+  volumes:
+    - $DATADIR/namenode:/shared
+  volumes_from: 
+    - data
+  ports:
+    - "8020:8020"
+    - "50070:50070"
+  dns: $DNS
+  environment:
+    - DNSDOCK_ALIAS=namenode.docker
+  command: hdfs namenode
+resourcemgr:
+  image: insidin/alpine-hadoop
+  hostname: resourcemgr.docker
+  name: resourcemgr
+  container_name : resourcemgr
+  volumes:
+    - $DATADIR/resourcemgr:/shared
+  ports:
+    - "8032:8032"
+    - "8088:8088"
+    - "19888:19888"
+    - "10020:10020"
+  dns: $DNS
+  environment:
+    - DNSDOCK_ALIAS=resourcemgr.docker
+  command: bash -c "yarn resourcemanager && mapred historyserver"
+datanode1:
+  image: insidin/alpine-hadoop
+  hostname: datanode1.docker
+  name: datanode1
+  container_name : datanode1
+  volumes:
+      - $DATADIR/datanode1:/shared
+  ports:
+    - "50010:50010"
+    - "8042:8042"
+  dns: $DNS
+  environment:
+    - DNSDOCK_ALIAS=datanode1.docker
+  command: bash -c "hadoop-daemon.sh --script hdfs start datanode && yarn nodemanager"
+datanode2:
+  image: insidin/alpine-hadoop
+  hostname: datanode2.docker
+  name: datanode2
+  container_name : datanode2
+  volumes:
+    - $DATADIR/datanode2:/shared
+  ports:
+    - "50011:50011"
+    - "8043:8042"
+  dns: $DNS
+  environment:
+    - DNSDOCK_ALIAS=datanode2.docker
+  command: bash -c "hadoop-daemon.sh --script hdfs start datanode && yarn nodemanager"
+datanode3:
+  image: insidin/alpine-hadoop
+  hostname: datanode3.docker
+  name: datanode3
+  container_name : datanode3
+  volumes:
+    - $DATADIR/datanode3:/shared
+  ports:
+    - "50012:50012"
+    - "8044:8042"
+  dns: $DNS
+  environment:
+    - DNSDOCK_ALIAS=datanode3.docker
+  command: bash -c "hadoop-daemon.sh --script hdfs start datanode && yarn nodemanager"

@@ -1,0 +1,15 @@
+dnsdock:
+  image: insidin/dnsdock
+  hostname: dnsdock.docker
+  container_name: dns
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  ports:
+    - "172.17.42.1:53:53/udp"
+    - "5380:80"
+data:
+  image: tianon/true
+  hostname: data.docker
+  container_name: data
+  volumes:
+    - /data
