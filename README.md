@@ -1,10 +1,11 @@
 # Docker-compose recipes
 
-## Docker machine
+## Preparation
+
+###Docker machine
 
 Check if a default machine exists: 
 >docker-machine ls
-
 
 Delete the default machine: 
 >docker-machine rm default
@@ -12,7 +13,16 @@ Delete the default machine:
 Create a new "default" machine:
 >docker-machine create -d virtualbox --engine-opt dns=8.8.8.8 --engine-opt bip=172.17.42.1/24 --engine-opt dns=172.17.42.1 --engine-opt host=unix:///var/run/docker.sock --virtualbox-memory "2048" default
 
-## Network setting
+### Run supporting containers
+
+Starts:
+- a DNS server
+- a data container
+
+Install support.yml:
+> docker-compose -f support.yml up -d
+
+### Configure host network settings
 
 Set your (updated) environment in the terminal first
 >eval "$(docker-machine env default)"
@@ -23,25 +33,14 @@ Check the machine IP (we refer to this as MACHINE_IP later on)
 Update your host network routing to easily connect to machine IP's:
 >sudo route -n add 172.17.0.0/16  \`docker-machine ip default\`
 
-(if this routing existed already, remove it first using 
+If this routing existed already, remove it first using 
 >sudo route -n delete 172.17.0.0/16 ...
-
-## Support
-
-Starts:
-- a DNS server
-- a data container
-
-Install support.yml:
-> docker-compose -f support.yml up -d
-
-## Network part 2
 
 Configure your host system to use the DNS server:
 
 First get the IP of the DNS server
 > docker-machine ssh default
-> 
+
 > ifconfig docker0 
 
 Add this to the dns server list of your host.
@@ -60,42 +59,61 @@ Start the containers:
 
 > docker-compose -f hadoop-dns.yml.mine up -d
 
-## Host hadoop client config
+## Test the hadoop cluster
 
-In your HADOOP_HOME/etc/hadoop folder:
+###Host hadoop client config
+
+On the host machine, in your HADOOP_HOME/etc/hadoop folder:
 
 - Edit core-site.xml and add
-><property>
->   <name>fs.defaultFS</name>
->	<value>hdfs://namenode.docker:8020</value>
-></property>
-
+```xml
+<property>
+   <name>fs.defaultFS</name>
+	<value>hdfs://namenode.docker:8020</value>
+</property>
+```
 - Edit yarn-site.xml and add
-><property>
->	<name>yarn.resourcemanager.hostname</name>
->   <value>resourcemgr.docker</value>
-></property>
+```xml
+<property>
+	<name>yarn.resourcemanager.hostname</name>
+   <value>resourcemgr.docker</value>
+</property>
+```
 
-## Test HDFS access
+### Test host HDFS access
 
-In your HADOOP_HOME folder, run 
+On the host machine, in your HADOOP_HOME folder, create a test directory on hdfs: 
 
 > ./bin/hdfs dfs -mkdir /test 
 
+Verify the existence of the directory:
+
 > ./bin/hdfs dfs -ls /
 
-## Test a Spark job:
+### Test a Spark job:
 
-First, set the Hadoop configuration path: hadoop conf dir
+First, configure the path to Hadoop conf dir on the host:
 
 > export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 
-Than, in your Spark installation, run:
+In your Spark installation folder, run:
 
-> ./bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --num-executors 3 --executor-cores 1 lib/spark-examples*.jar 100
+> ./bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --num-executors 2 --executor-cores 2 lib/spark-examples*.jar 100
 
+## Configuration customization
 
+To set specific hadoop configuration, first externalize the config files. To do so, copy the conf folder from https://github.com/insidin/docker-recipes/tree/master/alpine-hadoop/conf to the host file system.
 
+Link the newly created config to your hadoop nodes:
+
+- open hadoop-dns.yml.mine
+- add a volume mapping to each container: e.g. add the following under "volumes":
+
+> <path-to-you-conf-folder>:/shared/conf
+
+- set the mapped volume as an environment variable, by adding the following under "environment":
+
+> HADOOP_CONF_DIR=/shared/conf
 
 
 
