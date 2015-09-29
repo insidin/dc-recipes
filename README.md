@@ -21,7 +21,7 @@ Check the machine IP (we refer to this as MACHINE_IP later on)
 >docker-machine ip default
 
 Update your host network routing to easily connect to machine IP's:
->sudo route -n add 172.17.0.0/16  `docker-machine ip default`
+>sudo route -n add 172.17.0.0/16  \`docker-machine ip default\`
 
 (if this routing existed already, remove it first using 
 >sudo route -n delete 172.17.0.0/16 ...
