@@ -21,6 +21,8 @@ resourcemgr:
   container_name : resourcemgr
   volumes:
     - $DATADIR/resourcemgr:/shared
+  volumes_from: 
+    - data
   ports:
     - "8032:8032"
     - "8088:8088"
@@ -37,6 +39,8 @@ datanode1:
   container_name : datanode1
   volumes:
       - $DATADIR/datanode1:/shared
+  volumes_from: 
+    - data
   ports:
     - "50010:50010"
     - "8042:8042"
@@ -51,6 +55,8 @@ datanode2:
   container_name : datanode2
   volumes:
     - $DATADIR/datanode2:/shared
+  volumes_from: 
+    - data
   ports:
     - "50011:50011"
     - "8043:8042"
@@ -65,6 +71,8 @@ datanode3:
   container_name : datanode3
   volumes:
     - $DATADIR/datanode3:/shared
+  volumes_from: 
+    - data
   ports:
     - "50012:50012"
     - "8044:8042"
