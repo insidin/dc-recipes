@@ -44,9 +44,17 @@ First get the IP of the DNS server
 > 
 > ifconfig docker0 
 
-(or read it from the logs of your dns container:
-> docker logs dns
+Add this to the dns server list of your host.
 
+## Start the hadoop cluster
+
+> ./generate-yml.sh <data-dir> <dns-ip> hadoop-dns.yml
+
+This generates a customized yml file, hadoop-dns.yml.mine.
+
+Start the containers:
+
+> docker-machine -f hadoop-dns.yml.mine up -d
 
 
 
