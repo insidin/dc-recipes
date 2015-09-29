@@ -48,7 +48,7 @@ Add this to the dns server list of your host.
 
 ## Start the hadoop cluster
 
-> ./generate-yml.sh <data-dir> <dns-ip> hadoop-dns.yml
+> ./generate-yml.sh data-dir dns-ip hadoop-dns.yml
 
 This generates a customized yml file, hadoop-dns.yml.mine.
 
