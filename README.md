@@ -41,6 +41,7 @@ Configure your host system to use the DNS server:
 
 First get the IP of the DNS server
 > docker-machine ssh default
+> 
 > ifconfig docker0 
 
 (or read it from the logs of your dns container:
