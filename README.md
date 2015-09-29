@@ -52,9 +52,13 @@ Add this to the dns server list of your host.
 
 This generates a customized yml file, hadoop-dns.yml.mine.
 
+Format the namenode:
+
+> docker-compose -f hadoop-dns.yml.mine run namenode hdfs namenode -format
+
 Start the containers:
 
-> docker-machine -f hadoop-dns.yml.mine up -d
+> docker-compose -f hadoop-dns.yml.mine up -d
 
 
 
