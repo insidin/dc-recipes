@@ -24,40 +24,21 @@ Install support.yml:
 
 ### Configure host network settings
 
-Set your (updated) environment in the terminal first
->eval "$(docker-machine env default)"
+Set your (updated) environment in the terminal first by executing ```eval "$(docker-machine env default)"```. Check and note the machine IP by running ```docker-machine ip default```.
 
-Check the machine IP (we refer to this as MACHINE_IP later on)
->docker-machine ip default
+Now Update your host network routing to easily connect to machine IP's. On the host machine execute ```sudo route -n add 172.17.0.0/16  ``docker-machine ip default`` ```. If this routing existed already, remove it first by using ```sudo route -n delete 172.17.0.0/16 ...```.
 
-Update your host network routing to easily connect to machine IP's:
->sudo route -n add 172.17.0.0/16  \`docker-machine ip default\`
+Now configure your host system to use the newly created DNS server. First get the IP of the DNS server. Login on the virtual machine via ```docker-machine ssh default```and execute ```ifconfig docker0```. Add this IP address to the DNS server list of your host machine as the first DNS server. Simply type `````exit```to return to the host machine.
 
-If this routing existed already, remove it first using 
->sudo route -n delete 172.17.0.0/16 ...
-
-Configure your host system to use the DNS server:
-
-First get the IP of the DNS server
-> docker-machine ssh default
-
-> ifconfig docker0 
-
-Add this to the dns server list of your host.
+Tip: on Mac OSX, create a new network location so you can easily revert back to the default DNS settings when your dockerized DNS server is not running. 
 
 ## Start the hadoop cluster
 
-> ./generate-yml.sh data-dir dns-ip hadoop-dns.yml
+First substitute some environment specific variables in the yml file, by running ```./generate-yml.sh <data-dir> <dns-ip> hadoop-dns.yml``` with a full path data-dir and the newly created DNS server IP address. This script generates a customized yml file, hadoop-dns.yml.mine.
 
-This generates a customized yml file, hadoop-dns.yml.mine.
+Now using this file, first format the namenode: ```docker-compose -f hadoop-dns.yml.mine run namenode hdfs namenode -format```. Warning: if your hadoop cluster already contained data, this command ask you to confirm if you want to reformat (and thus erase) the data folders.
 
-Format the namenode:
-
-> docker-compose -f hadoop-dns.yml.mine run namenode hdfs namenode -format
-
-Start the containers:
-
-> docker-compose -f hadoop-dns.yml.mine up -d
+Finally start the containers with ```docker-compose -f hadoop-dns.yml.mine up -d```. You can take a look at the logs via Kitematic or via the logs files located at ```<data-dir>\<hostname>\logs```.
 
 ## Test the hadoop cluster
 
@@ -108,13 +89,15 @@ Link the newly created config to your hadoop nodes:
 
 - open hadoop-dns.yml.mine
 - add a volume mapping to each container: e.g. add the following under "volumes":
-
-> <path-to-you-conf-folder>:/shared/conf
-
+```
+volumes:
+	- <path-to-you-conf-folder>:/shared/conf
+```
 - set the mapped volume as an environment variable, by adding the following under "environment":
-
-> HADOOP_CONF_DIR=/shared/conf
-
+```
+environment:
+	- HADOOP_CONF_DIR=/shared/conf
+```
 
 
 Deprecated:
