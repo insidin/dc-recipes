@@ -4,41 +4,33 @@
 
 ###Docker machine
 
-Check if a default machine exists: 
->docker-machine ls
+First check if a default machine exists by executing ```docker-machine ls```. Kitematic creates and uses a machine named ```default```, but we need to reconfigure it first. Warning: this will delete all current (Kitematic) containers.
 
-Delete the default machine: 
->docker-machine rm default
+Delete the default machine by executing ```docker-machine rm default```. Afterwards, rereate the new ```default machine```:
 
-Create a new "default" machine:
->docker-machine create -d virtualbox --engine-opt dns=8.8.8.8 --engine-opt bip=172.17.42.1/24 --engine-opt dns=172.17.42.1 --engine-opt host=unix:///var/run/docker.sock --virtualbox-memory "2048" default
+>docker-machine create -d virtualbox --engine-opt dns=8.8.8.8 --engine-opt dns=172.17.42.1 --engine-opt bip=172.17.42.1/24 --engine-opt host=unix:///var/run/docker.sock --virtualbox-memory "2048" default
 
 ### Run supporting containers
 
-Starts:
-- a DNS server
-- a data container
-
-Install support.yml:
-> docker-compose -f support.yml up -d
+To support the installation, a DNS server and a data-only container are started by running ```docker-compose -f support.yml up -d```.
 
 ### Configure host network settings
 
 Set your (updated) environment in the terminal first by executing ```eval "$(docker-machine env default)"```. Check and note the machine IP by running ```docker-machine ip default```.
 
-Now Update your host network routing to easily connect to machine IP's. On the host machine execute ```sudo route -n add 172.17.0.0/16  ``docker-machine ip default`` ```. If this routing existed already, remove it first by using ```sudo route -n delete 172.17.0.0/16 ...```.
+Now Update your host network routing to easily connect to machine IP's. On the host machine execute ```sudo route -n add 172.17.0.0/16  \`docker-machine ip default\` ```. If this routing existed already, remove it first by using ```sudo route -n delete 172.17.0.0/16 ...```.
 
-Now configure your host system to use the newly created DNS server. First get the IP of the DNS server. Login on the virtual machine via ```docker-machine ssh default```and execute ```ifconfig docker0```. Add this IP address to the DNS server list of your host machine as the first DNS server. Simply type `````exit```to return to the host machine.
+Now configure your host system to use the newly created DNS server. First get the IP of the DNS server. Login on the virtual machine via ```docker-machine ssh default```and execute ```ifconfig docker0```. Add this IP address to the DNS server list of your host machine as the first DNS server. Simply type ```exit```to return to the host machine.
 
 Tip: on Mac OSX, create a new network location so you can easily revert back to the default DNS settings when your dockerized DNS server is not running. 
 
 ## Start the hadoop cluster
 
-First substitute some environment specific variables in the yml file, by running ```./generate-yml.sh <data-dir> <dns-ip> hadoop-dns.yml``` with a full path data-dir and the newly created DNS server IP address. This script generates a customized yml file, hadoop-dns.yml.mine.
+First substitute some environment specific variables in the yml file, by running ```./generate-yml.sh $DATADIR $DNS hadoop-dns.yml``` with a full path $DATADIR and the newly created $DNS IP address. This script generates a customized yml file, hadoop-dns.yml.mine.
 
 Now using this file, first format the namenode: ```docker-compose -f hadoop-dns.yml.mine run namenode hdfs namenode -format```. Warning: if your hadoop cluster already contained data, this command ask you to confirm if you want to reformat (and thus erase) the data folders.
 
-Finally start the containers with ```docker-compose -f hadoop-dns.yml.mine up -d```. You can take a look at the logs via Kitematic or via the logs files located at ```<data-dir>\<hostname>\logs```.
+Finally start the containers with ```docker-compose -f hadoop-dns.yml.mine up -d```. You can take a look at the logs via Kitematic or via the logs files located at ```$DATADIR\<hostname>\logs```.
 
 ## Test the hadoop cluster
 
