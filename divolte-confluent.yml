@@ -4,7 +4,7 @@ zookeeper:
     - "2181:2181"
   hostname: zookeeper
 kafka:
-  image: dcd/kafka
+  image: confluent/kafka
   ports:
     - "9092:9092"
   hostname: kafka
@@ -37,7 +37,7 @@ schemaregistry:
 #    - "8126:8126"
 #  hostname: statsd
 divolte:
-  image: dcd/divolte-collector
+  image: insidin/divolte-collector
   ports:
     - "8290:8290"
   hostname: divoltecollector
