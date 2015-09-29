@@ -60,10 +60,46 @@ Start the containers:
 
 > docker-compose -f hadoop-dns.yml.mine up -d
 
+## Host hadoop client config
+
+In your HADOOP_HOME/etc/hadoop folder:
+
+- Edit core-site.xml and add
+><property>
+>   <name>fs.defaultFS</name>
+>	<value>hdfs://namenode.docker:8020</value>
+></property>
+
+- Edit yarn-site.xml and add
+><property>
+>	<name>yarn.resourcemanager.hostname</name>
+>   <value>resourcemgr.docker</value>
+></property>
+
+## Test HDFS access
+
+In your HADOOP_HOME folder, run 
+
+> ./bin/hdfs dfs -mkdir /test 
+
+> ./bin/hdfs dfs -ls /
+
+## Test a Spark job:
+
+First, set the Hadoop configuration path: hadoop conf dir
+
+> export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+
+Than, in your Spark installation, run:
+
+> ./bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --num-executors 3 --executor-cores 1 lib/spark-examples*.jar 100
 
 
 
 
+
+
+Deprecated:
 
 
 
