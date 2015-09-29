@@ -10,4 +10,5 @@ THEFILE=$3
 
 SUFFIX="mine"
 
-exec sed "s/$DATADIR_KEY/$(echo $DATADIR_VALUE | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')/g" $THEFILE > $THEFILE.$SUFFIX
+exec sed -e "s/$DATADIR_KEY/$(echo $DATADIR_VALUE | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')/g" -e "s/$DNS_KEY/$(echo $DNS_VALUE | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')/g" $THEFILE > $THEFILE.$SUFFIX
+
