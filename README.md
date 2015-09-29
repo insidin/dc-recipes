@@ -2,10 +2,15 @@
 
 ## Docker machine
 
-Check if a default machine exists: docker-machine ls
-Delete the default machine: docker-machine rm default
+Check if a default machine exists: 
+>docker-machine ls
+
+
+Delete the default machine: 
+>docker-machine rm default
+
 Create a new "default" machine:
-create -d virtualbox --engine-opt dns=8.8.8.8 --engine-opt bip=172.17.42.1/24 --engine-opt dns=172.17.42.1 --engine-opt host=unix:///var/run/docker.sock --virtualbox-memory "2048" default
+>create -d virtualbox --engine-opt dns=8.8.8.8 --engine-opt bip=172.17.42.1/24 --engine-opt dns=172.17.42.1 --engine-opt host=unix:///var/run/docker.sock --virtualbox-memory "2048" default
 
 
 ## Support
