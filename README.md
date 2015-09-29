@@ -33,6 +33,10 @@ Starts:
 - a DNS server
 - a data container
 
+Install support.yml:
+> docker-machine -f support.yml up -d
+
+
 
 
 
