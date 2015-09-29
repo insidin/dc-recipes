@@ -10,7 +10,21 @@ Delete the default machine:
 >docker-machine rm default
 
 Create a new "default" machine:
->create -d virtualbox --engine-opt dns=8.8.8.8 --engine-opt bip=172.17.42.1/24 --engine-opt dns=172.17.42.1 --engine-opt host=unix:///var/run/docker.sock --virtualbox-memory "2048" default
+>docker-machine create -d virtualbox --engine-opt dns=8.8.8.8 --engine-opt bip=172.17.42.1/24 --engine-opt dns=172.17.42.1 --engine-opt host=unix:///var/run/docker.sock --virtualbox-memory "2048" default
+
+## Network setting
+
+Set your (updated) environment in the terminal first
+>eval "$(docker-machine env default)"
+
+Check the machine IP (we refer to this as MACHINE_IP later on)
+>docker-machine ip default
+
+Update your host network routing to easily connect to machine IP's:
+>sudo route -n add 172.17.0.0/16  `docker-machine ip default`
+
+(if this routing existed already, remove it first using 
+>sudo route -n delete 172.17.0.0/16 ...
 
 
 ## Support
