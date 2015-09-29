@@ -26,7 +26,6 @@ Update your host network routing to easily connect to machine IP's:
 (if this routing existed already, remove it first using 
 >sudo route -n delete 172.17.0.0/16 ...
 
-
 ## Support
 
 Starts:
@@ -34,7 +33,20 @@ Starts:
 - a data container
 
 Install support.yml:
-> docker-machine -f support.yml up -d
+> docker-compose -f support.yml up -d
+
+## Network part 2
+
+Configure your host system to use the DNS server:
+
+First get the IP of the DNS server
+> docker-machine ssh default
+> ifconfig docker0 
+
+(or read it from the logs of your dns container:
+> docker logs dns
+
+
 
 
 
