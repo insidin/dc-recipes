@@ -1,0 +1,64 @@
+zookeeper:
+  hostname: zookeeper1.docker
+  container_name: zookeeper1
+  image: confluent/zookeeper
+  ports: 
+    - "2181:2181"
+  dns: $DNS
+  environment:
+    - DNSDOCK_ALIAS=zookeeper1.docker
+kafka:
+  hostname: kafka1.docker
+  container_name: kafka1
+  image: confluent/kafka
+  ports:
+    - "9092:9092"
+  links: 
+    - zookeeper:zookeeper
+#    - statsd:statsd
+  dns: $DNS
+  environment:
+    - DNSDOCK_ALIAS=kafka1.docker
+    - KAFKA_LOG_CLEANUP_POLICY=compact
+    - KAFKA_ADVERTISED_HOST_NAME=kafka1.docker
+    - KAFKA_BROKER_ID=0
+    - KAFKA_DELETE_TOPIC_ENABLE=true
+#   - KAFKA_EXTERNAL_KAFKA_STATSD_REPORTER_ENABLED=true
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper1.docker:2181
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+schemaregistry:
+  hostname: schemaregistry1.docker
+  container_name: schemaregistry1  
+  image: confluent/schema-registry
+  ports:
+    - "8081:8081"
+  links:
+    - zookeeper:zookeeper
+    - kafka:kafka
+  dns: $DNS
+  environment:
+    - DNSDOCK_ALIAS=schemaregistry1.docker
+    - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper1.docker:2181
+    - SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL=none
+#statsd:
+#  image: kamon/grafana_graphite
+#  ports:
+#    - "8888:80"
+#    - "8125:8125/udp"
+#    - "8126:8126"
+#  hostname: statsd
+divoltecollector:
+  hostname: divoltecollector1.docker
+  container_name: divoltecollector1  
+  image: insidin/divolte-collector
+  ports:
+    - "8290:8290"
+  links:
+    - kafka:kafka
+    - schemaregistry:schemaregistry
+  dns: $DNS
+  volumes:
+    - $DATADIR/divolte-collector:/etc/divolte-collector
+  environment:
+    - DNSDOCK_ALIAS=divoltecollector1.docker
