@@ -31,7 +31,7 @@ resourcemgr:
   dns: $DNS
   environment:
     - DNSDOCK_ALIAS=resourcemgr.docker
-  command: bash -c "yarn resourcemanager && mapred historyserver"
+  command: bash -c "mr-jobhistory-daemon.sh start historyserver && yarn resourcemanager"
 datanode1:
   image: insidin/alpine-hadoop
   hostname: datanode1.docker
