@@ -27,8 +27,6 @@ kafka:
     - KAFKA_ZOOKEEPER_CONNECT=zookeeper1.docker:2181
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
-  command: [""]
-  entrypoint: ["/kafka-docker.sh"]
 schemaregistry:
   hostname: schemaregistry1.docker
   container_name: schemaregistry1  
@@ -43,8 +41,6 @@ schemaregistry:
     - DNSDOCK_ALIAS=schemaregistry1.docker
     - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper1.docker:2181
     - SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL=none
-  entrypoint: ["/schema-registry-docker.sh"]
-  command: [""]
 #statsd:
 #  image: kamon/grafana_graphite
 #  ports:
