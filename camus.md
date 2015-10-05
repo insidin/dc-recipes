@@ -8,7 +8,6 @@ You should replace the $DATADIR and $DNS and make sure the folder $DATADIR/camus
 
 Now in the started camus1 container, run camus by executing:
 > cd /opt/confluent
->
 > bin/camus-run -D schema.registry.url=http://schemaregistry1.docker:8081 -D kafka.move.to.earliest.offset=true -P /shared/camus.properties
 
 
