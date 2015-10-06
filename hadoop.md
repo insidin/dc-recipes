@@ -2,9 +2,9 @@ A docker-compose recipe to run a Hadoop cluster.
 
 ## Start the hadoop cluster
 
-First substitute some environment specific variables in the yml file, by running ```./generate-yml.sh $DATADIR $DNS hadoop-dns.yml``` with a full path $DATADIR and the newly created $DNS IP address. This script generates a customized yml file, hadoop-dns.yml.mine.
+First substitute some environment specific variables in the yml file, by running ```./generate-yml.sh $DATADIR $DNS hadoop-dns.yml``` with a full path $DATADIR and the newly created $DNS IP address. This script generates 2 customized yml files, hadoop-dns.yml.mine and hadoop-dns.yml.py.mine. The second file uses an extended docker image that adds python support, use it further on it you need python.
 
-Now using this file, first format the namenode: ```docker-compose -f hadoop-dns.yml.mine run namenode "hdfs namenode -format"```. Warning: if your hadoop cluster already contained data, this command ask you to confirm if you want to reformat (and thus erase) the data folders.
+Now using one of these file, first format the namenode: ```docker-compose -f hadoop-dns.yml.mine run namenode "hdfs namenode -format"```. Warning: if your hadoop cluster already contained data, this command ask you to confirm if you want to reformat (and thus erase) the data folders.
 
 Finally start the containers with ```docker-compose -f hadoop-dns.yml.mine up -d```. You can take a look at the logs via Kitematic or via the logs files located at ```$DATADIR\<hostname>\logs```.
 
