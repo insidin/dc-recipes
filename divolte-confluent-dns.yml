@@ -41,6 +41,7 @@ schemaregistry:
     - DNSDOCK_ALIAS=schemaregistry1.docker
     - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper1.docker:2181
     - SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL=none
+    - SCHEMA_REGISTRY_KAFKASTORE_INIT_TIMEOUT_MS=10000
 #statsd:
 #  image: kamon/grafana_graphite
 #  ports:

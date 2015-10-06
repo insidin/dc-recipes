@@ -1,5 +1,5 @@
 namenode:
-  image: insidin/alpine-hadoop
+  image: $IMAGE
   hostname: namenode.docker
   name: namenode
   container_name : namenode  
@@ -15,7 +15,7 @@ namenode:
     - DNSDOCK_ALIAS=namenode.docker
   command: ["./namenode.sh namenode.docker"]
 resourcemgr:
-  image: insidin/alpine-hadoop
+  image: $IMAGE
   hostname: resourcemgr.docker
   name: resourcemgr
   container_name : resourcemgr
@@ -33,7 +33,7 @@ resourcemgr:
     - DNSDOCK_ALIAS=resourcemgr.docker
   command: ["./resourcemgr.sh resourcemgr.docker"]
 datanode1:
-  image: insidin/alpine-hadoop
+  image: $IMAGE
   hostname: datanode1.docker
   name: datanode1
   container_name : datanode1
@@ -52,7 +52,7 @@ datanode1:
     - DNSDOCK_ALIAS=datanode1.docker
   command: ["./datanode.sh datanode1.docker"]
 datanode2:
-  image: insidin/alpine-hadoop
+  image: $IMAGE
   hostname: datanode2.docker
   name: datanode2
   container_name : datanode2
@@ -71,7 +71,7 @@ datanode2:
     - DNSDOCK_ALIAS=datanode2.docker
   command: ["./datanode.sh datanode2.docker"]
 datanode3:
-  image: insidin/alpine-hadoop
+  image: $IMAGE
   hostname: datanode3.docker
   name: datanode3
   container_name : datanode3

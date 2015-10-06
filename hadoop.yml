@@ -1,53 +1,52 @@
 namenode:
-  image: dcd/alpine-hadoop
-  hostname: namenode
+  image: insidin/alpine-hadoop
+  hostname: namenode.docker
+  name: namenode
+  container_name : namenode
   volumes:
     - $DATADIR/namenode:/shared
-    - $DATADIR/conf:/shared/conf
+  volumes_from: 
+    - data
   ports:
     - "8020:8020"
     - "50070:50070"
   command: hdfs namenode
-resourcemgr:
-  image: dcd/alpine-hadoop
-  hostname: resourcemgr
-  volumes:
-    - $DATADIR/resourcemgr:/shared
-    - $DATADIR/conf:/shared/conf
-  command: bash -c "yarn resourcemanager && mapred historyserver"
 datanode1:
-  image: dcd/alpine-hadoop
-  hostname: datanode1
+  image: insidin/alpine-hadoop
+  hostname: datanode1.docker
+  name: datanode1
+  container_name: datanode1
   volumes:
       - $DATADIR/datanode1:/shared
-      - $DATADIR/conf:/shared/conf
   links:
       - namenode
-      - resourcemgr
   ports:
-      - "5001:50075"
-  command: bash -c "hadoop-daemon.sh --config /shared/conf --script hdfs start datanode && yarn nodemanager"
+    - "50010:50010"
+    - "8042:8042"
+  command: hdfs datanode
 datanode2:
-  image: dcd/alpine-hadoop
-  hostname: datanode2
+  image: insidin/alpine-hadoop
+  hostname: datanode2.docker
+  name: datanode2
+  container_name: datanode2
   volumes:
       - $DATADIR/datanode2:/shared
-      - $DATADIR/conf:/shared/conf
   links:
       - namenode
-      - resourcemgr
   ports:
-      - "5002:50075"
-  command: bash -c "hadoop-daemon.sh --config /shared/conf --script hdfs start datanode && yarn nodemanager"
+    - "50011:50011"
+    - "8043:8042"
+  command: hdfs datanode
 datanode3:
-  image: dcd/alpine-hadoop
-  hostname: datanode3
+  image: insidin/alpine-hadoop
+  hostname: datanode3.docker
+  name: datanode3
+  container_name: datanode3
   volumes:
       - $DATADIR/datanode3:/shared
-      - $DATADIR/conf:/shared/conf
   links:
       - namenode
-      - resourcemgr
   ports:
-      - "5003:50075"
-  command: bash -c "hadoop-daemon.sh --config /shared/conf --script hdfs start datanode && yarn nodemanager"
+    - "50012:50012"
+    - "8044:8042"
+  command: hdfs datanode
